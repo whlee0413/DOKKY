@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 맵핑될 DAO 인터페이스의 Full name 을 준다. -->
+<mapper namespace="com.won.dokky.member.mapper.MemberMapper">
+
+	<!-- id 속성은 DAO 의 메소드와 같아야 한다. 여기의 memberVO 는 mybatis-confg.xml 에 Alias 되어 
+		있다. -->
+
+	<insert id="memberInsert" parameterType="MemberVO">
+		INSERT INTO member
+		(memId, 
+		memPw, 
+		memMail)
+		VALUES(
+		#{memId},
+		#{memPw},
+		#{memMail}
+		)
+	</insert>
+	<select id="memberSelect" parameterType="MemberVO" resultType="MemberVO">
+		SELECT * 
+		FROM member 
+		WHERE memId = #{memId} AND memPw = #{memPw}
+	</select>
+
+<!-- id중복체크. 결과는 1 또는 0 이기때문에 int -->	
+	<select id="memberIdCheck" parameterType="String" resultType="int">
+		SELECT count(*) 
+		FROM member
+		WHERE memId = #{memId}
+	</select>
+	
+	<update id="memberUpdate" parameterType="MemberVO">
+		UPDATE member
+	<set>
+		<if test="memPw !=null">memPw= #{memPw}, </if> 
+		<if test="memMail !=null">memMail= #{memMail}</if>
+	</set>
+		WHERE memId = #{memId}
+	</update>
+	
+	<delete id="memberDelete" parameterType="MemberVO">
+		DELETE FROM member
+		WHERE memId = #{memId}
+	</delete>
+</mapper>

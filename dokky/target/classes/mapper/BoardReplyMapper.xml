@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.won.dokky.board.mapper.BoardMapper">
+
+<!-- 댓글 전체 조회 -->
+	<select id="readReply" resultType="BoardReplyVO" parameterType="String">
+    	SELECT
+    		  rseq, content, writer, regdate
+    	 FROM boardreply
+    	WHERE seq = #{seq}
+	</select>
+<!-- 댓글 단 건 조회-->
+	<select id="selectReply"  resultType="BoardReplyVO" parameterType="map">
+		SELECT *
+		FROM   boardreply
+		WHERE seq = #{seq} and rseq = #{rseq}
+	</select>
+<!-- 댓글 갯수 -->
+	<select id="replyCount" resultType="int" >
+		SELECT count(*)
+		FROM boardreply
+		where seq = #{seq}
+	</select>	
+<!-- 댓글 입력 -->
+	<insert id="boardReplyInsert" parameterType="BoardReplyVO">
+		INSERT INTO boardReply(
+		seq, 
+		rseq,
+		writer,
+		content,
+		regdate
+		)
+		VALUES(
+		#{seq, jdbcType=VARCHAR},
+		(SELECT NVL(MAX(rseq),0)+1 FROM boardReply),
+		#{writer, jdbcType=VARCHAR},
+		#{content, jdbcType=VARCHAR},
+		TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+		)
+	</insert>
+<!-- 댓글 삭제 -->
+	<delete id="boardReplyDelete" parameterType="map">
+		DELETE boardReply
+		WHERE seq = #{seq} and rseq = #{rseq}
+		
+	</delete>
+
+<!-- 댓글 수정 -->	
+	 <update id="boardReplyModify" parameterType="BoardReplyVO">
+        UPDATE boardReply
+            SET
+            CONTENT = #{content}
+        WHERE 	seq  = #{seq}	AND
+        		rseq = #{rseq}
+    </update>
+
+
+</mapper>

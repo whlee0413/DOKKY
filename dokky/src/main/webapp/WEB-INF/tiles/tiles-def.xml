@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+  "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+	<!--  tiles 적용 --> 
+	
+	<definition name="/*/*" template="/WEB-INF/views/tiles/layout.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+	<definition name="*" template="/WEB-INF/views/tiles/layout.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
+	</definition>
+	<!-- name: controller에서 반환할 이름 
+		 template: 적용할 jsp 페이지
+		 value: 해당 name부분에 value 페이지들이 들어가서 적용됨.
+ 		 
+ 		 EX) 컨트롤러에서 return값이  "/member/removeForm" 이면 {1}/{2} 값으로서
+ 		 	 속성 value값은 "/WEB-INF/views/member/removeForm.jsp"를 찾음  
+		
+	--> 
+
+		
+	
+</tiles-definitions>

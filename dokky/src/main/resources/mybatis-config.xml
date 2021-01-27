@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <settings>
+  		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings> -->
+	<settings>
+	<setting name="mapUnderscoreToCamelCase" value="true"/>
+</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.won.dokky.board.BoardVO" alias="BoardVO" />
+		<typeAlias type="com.won.dokky.board.BoardReplyVO" alias="BoardReplyVO"/>
+		<typeAlias type="com.won.dokky.member.MemberVO" alias="MemberVO"/>
+		<typeAlias type="com.won.dokky.board.utils.SearchCriteria" alias="SearchCriteria"/>
+		<typeAlias type="com.won.dokky.board.HashTagVO" alias="HashTagVO"/>
+	</typeAliases>
+</configuration>

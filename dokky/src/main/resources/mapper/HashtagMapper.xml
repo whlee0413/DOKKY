@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.won.dokky.board.mapper.BoardMapper">
+
+<!-- 해쉬태그 중복 조회 -->
+<select id="readHashtag" parameterType="String" resultType="String">
+	SELECT tagId, tagName
+	FROM   hashtag
+	WHERE tagName  = #{tagName}
+</select>
+
+
+<!-- 태그아이디-게시글 등록 -->
+<insert id="boardHashtagInsert" parameterType="HashTagVO">
+		INSERT INTO board_hashtag(
+		seq, 
+		tagId
+		)
+		VALUES(
+		#{seq},
+		#{tagId}
+		)
+	</insert>
+<!-- 게시글 해쉬태그 조회 -->
+<select id="selectHashTags" parameterType="String" resultType="HashTagVO">
+	    SELECT tagname, bh.tagid
+ 		FROM board_hashtag bh join board b on (bh.seq=b.seq) 
+                        join hashtag h on (h.tagid = bh.tagid)
+		WHERE b.seq=#{seq}
+</select>	
+	
+<!-- 태그아이디-게시글 삭제 -->
+<delete id="boardHashtagDelete" parameterType="String">
+		DELETE board_hashtag
+		WHERE seq = #{seq}
+	</delete>	
+
+ <!-- 해쉬태그 내용 등록 -->	
+<insert id="hashtagInsert" parameterType="HashTagVO">
+		INSERT INTO hashtag(
+		tagId, 
+		tagName
+		)
+		VALUES(
+		(SELECT NVL(MAX(tagId),0)+1 FROM hashtag),
+		#{tagName}
+		)
+	</insert> 
+
+	
+
+
+
+</mapper>

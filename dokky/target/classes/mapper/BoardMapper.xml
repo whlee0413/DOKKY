@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.won.dokky.board.mapper.BoardMapper">
+
+
+<!-- 게시물 조회수 -->
+	<update id="plusCnt" parameterType="String">
+	  UPDATE BOARD SET 
+	  CNT = CNT + 1 
+	  WHERE SEQ = #{seq}
+	</update>
+
+<!-- 가장 최근 게시물 seq 번호 조회 -->
+<select id="boardMaxSeq" resultType="String">
+	SELECT max(seq)
+	FROM board
+</select>
+
+<!-- 게시물 리스트 -->
+	<select id="list" resultType="BoardVO" parameterType="SearchCriteria">
+		SELECT  *
+ 			FROM (   SELECT  ROW_NUMBER() OVER(ORDER BY b.seq DESC) AS RNUM
+	                      	 ,b.*  <if test='tagName!=null'>, tagname</if>
+			         FROM board b <if test='tagName !=null'>
+			         			  JOIN board_hashtag bh ON (b.seq=bh.seq)
+			         			  JOIN hashtag h ON (h.tagid=bh.tagid)
+			         			  </if>
+			         WHERE 1=1
+			         <include refid="search"></include>
+			         <include refid="category"></include>
+			      <if test='tagName !=null'>AND UPPER(tagName)=UPPER(#{tagName})</if>  
+			       )
+        WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY seq DESC
+		
+	</select>
+			
+<!-- DB에서 전체 데이터 갯수 가져옴  -->
+	<select id="listCount" resultType="int" parameterType="SearchCriteria">
+			
+				SELECT count(b.seq)
+				FROM board b 	  <if test='tagName !=null'>
+			         			  JOIN board_hashtag bh ON (b.seq=bh.seq)
+			         			  JOIN hashtag h ON (h.tagid=bh.tagid)
+			         			  </if>
+				WHERE 1=1
+				<include refid="search"></include>	
+				<include refid="category"></include>
+				
+				 <if test='tagName !=null'>AND tagname=#{tagName}</if>  
+			<![CDATA[AND b.seq>0]]>
+			</select>
+<!-- 게시물 리스트 끝-->
+
+	
+<!--  게시글 등록 -->
+	<insert id="boardInsert" parameterType="BoardVO" >
+		INSERT INTO board(
+		seq, 
+		title,
+		writer,
+		content,
+		regdate,
+		category
+		)
+		VALUES(
+		(SELECT NVL(MAX(seq),0)+1 FROM board),
+		#{title, jdbcType=VARCHAR},
+		#{writer, jdbcType=VARCHAR},
+		#{content, jdbcType=VARCHAR},
+		TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+		#{category, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+<!-- 게시물 수정 -->
+	<update id="boardModify"  parameterType="BoardVO">
+		UPDATE board 
+		<set>
+		<if test="category !=null">category= #{category}, </if>
+		<if test="title !=null">title= #{title}, 		</if> 
+		<if test="content !=null">content= #{content}, </if>
+								  modidate= TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')  
+		</set>					  
+			WHERE seq = #{seq}		
+	</update>
+<!-- 게시물 삭제 -->
+	<delete id="boardDelete" parameterType="BoardVO">
+		DELETE board
+		WHERE seq = #{seq}
+	</delete>
+<!-- 게시물 삭제할 때 하위 댓글 먼저 삭제 쿼리 -->
+	<delete id="boardRepliesDelete" parameterType="BoardReplyVO">
+		DELETE boardReply
+		WHERE seq = #{seq}
+	</delete>
+
+<!-- 게시물 내용 단건조회 -->
+<select id="selectBoard" parameterType="BoardVO" resultType="BoardVO">
+	SELECT *
+	FROM   board
+	WHERE seq =#{seq}
+</select>
+
+<!-- 커뮤니티 -->
+<select id="boardCummunity"	 resultType="BoardVO">
+	SELECT seq, title, writer, regdate
+	FROM ( SELECT *
+			FROM  board
+			WHERE category ='daily' or category='notice'
+			ORDER BY regdate desc)
+	WHERE rownum 	<![CDATA[ <=]]> 10
+</select>
+
+<!--  Q/A-->
+<select id="boardQandA"	 resultType="BoardVO">
+	SELECT * 
+	FROM ( SELECT * 
+			FROM  board
+			WHERE category ='tech' or category='job'
+			ORDER BY regdate desc)
+	WHERE rownum 	<![CDATA[ <=]]> 5
+</select>
+
+<!--  해쉬태그 -->
+<select id="boardHashTags"	 resultType="HashTagVO">
+	  SELECT *
+ 			 FROM (
+			          SELECT  h.tagid, count(*) AS tagname_count, tagname
+			          FROM board_hashtag bh join hashtag h on bh.tagid=h.tagid
+			          GROUP BY h.tagid, tagname
+			          ORDER BY tagname_count desc) 
+		WHERE rownum <![CDATA[ <=]]> 20
+</select>
+	
+<!-- SQL 조각 모음 -->	
+	<sql id="category">
+			<choose>
+				<when test='category =="notice"'>
+					AND  category = 'notice'
+				</when>
+				<when test='category =="daily"'>
+					AND  category = 'daily'
+				</when>
+				<when test='category =="tech"'>
+					AND  category = 'tech'
+				</when>
+				<when test='category =="job"'>
+					AND  category = 'job'
+				</when>
+				<when test='category =="communityAll"'> 
+					AND  (category = 'daily' or category = 'notice')
+				</when>
+				<when test='category =="qnaAll"'>
+					AND  (category = 'tech' or category = 'job')
+				</when>
+			</choose>  
+	</sql>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'tc'.toString()">AND (TITLE LIKE '%' || #{keyword} || '%') or (CONTENT LIKE '%' || #{keyword} || '%')</if>
+		</if>
+	</sql>
+
+
+
+
+</mapper>
