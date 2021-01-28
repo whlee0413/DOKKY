@@ -43,7 +43,7 @@
 								      <input type ="text" name="title"  class="form-control" style="width: 800px; display: inline;" placeholder="${board.title}"  value="${board.title}"><br/> 
 									  <br/>
 									<textarea cols="30" rows="10" name="content"  class="form-control" style="width: 800px; display: inline;" placeholder="${board.content}" >${board.content}</textarea><br/>
-									
+									 <input type ="text" name="tagName"  class="form-control" style="width: 800px; display: inline;" value="${hashTag}"><br/> 
 									
 									<input type="submit" value="수정">
 									

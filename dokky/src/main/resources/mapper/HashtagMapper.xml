@@ -3,8 +3,8 @@
 <mapper namespace="com.won.dokky.board.mapper.BoardMapper">
 
 <!-- 해쉬태그 중복 조회 -->
-<select id="readHashtag" parameterType="String" resultType="String">
-	SELECT tagId, tagName
+<select id="readHashtag" parameterType="String" resultType="HashTagVO">
+	SELECT  tagname
 	FROM   hashtag
 	WHERE tagName  = #{tagName}
 </select>

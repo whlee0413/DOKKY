@@ -15,9 +15,16 @@ public class BoardVO {
 	String modidate;
 	
 	String memId;
+	String tagName;
 	
 	
 	
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
 	public String getSeq() {
 		return seq;
 	}
@@ -79,6 +86,6 @@ public class BoardVO {
 	public String toString() {
 		return "BoardVO [seq=" + seq + ", cnt=" + cnt + ", title=" + title + ", writer=" + writer + ", content="
 				+ content + ", category=" + category + ", regdate=" + regdate + ", modidate=" + modidate + ", memId="
-				+ memId + "]";
+				+ memId + ", tagName=" + tagName + "]";
 	}
 }

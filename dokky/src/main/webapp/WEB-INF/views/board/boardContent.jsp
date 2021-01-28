@@ -58,8 +58,10 @@ function modifyFocus(rseqParam) {
 									<c:choose>
 										<c:when test="${writer == memId}">
 											<span class="date-saperate">∙</span>
-											<a href="/boardModifyForm?seq=${board.seq}"> <span
-												class="timeago">${board.modidate }</span> <c:choose>
+											 <a href="/boardModifyForm?seq=${board.seq}">
+											  
+											<span class="timeago">${board.modidate }</span> 
+												<c:choose>
 													<c:when test="${empty modidate }"> 수정 </c:when>
 													<c:when test="${!empty modidate }"> 수정됨 </c:when>
 												</c:choose>

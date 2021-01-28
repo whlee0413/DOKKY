@@ -1,5 +1,6 @@
 package com.won.dokky.board.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -19,7 +20,6 @@ import com.won.dokky.board.HashTagVO;
 import com.won.dokky.board.service.BoardService;
 import com.won.dokky.board.utils.PageMaker;
 import com.won.dokky.board.utils.SearchCriteria;
-import com.won.dokky.member.MemberVO;
 import com.won.dokky.member.service.MemberService;
 
 @Controller
@@ -72,16 +72,13 @@ public class BoardController {
 		//category를 redirect 뒤로 같이 보냄
 		model.addAttribute("category",category);
 		boardService.boardInsert(board);
-		
-		System.out.println("seq 값은???    " + boardService.boardMaxSeq());
-		System.out.println("해쉬태그   " +vo.getTagName());
-		
 		//공백, 콤마, # 제거
 		String hashtags = vo.getTagName().replace(" ", "").replace(",", "");
 		String tagName[] = hashtags.split("#");
+		System.out.println( "tagName 값 : " +tagName);
+		
 		for(int i=1; i<tagName.length; i++) {
 			System.out.println("tagName["+i+"] :  " +   tagName[i]);
-			
 			try {
 				//중복조회
 				String result = boardService.readHashtag(tagName[i]);
@@ -92,17 +89,16 @@ public class BoardController {
 				vo.setTagName(tagName[i]);
 				boardService.hashtagInsert(vo);
 				}
-				System.out.println("이건?:  " +tagName[i] + "요고는?:  "+boardService.readHashtag(tagName[i]) );
+				System.out.println("tagNane?:  " +tagName[i] + "  tagId?:  "+boardService.readHashtag(tagName[i]) );
 				//참조테이블 생성
 				vo.setSeq(boardService.boardMaxSeq());
 				vo.setTagId(boardService.readHashtag(tagName[i]));
 				boardService.boardHashtagInsert(vo);
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		
 		return "redirect:/boardList";
 	}
 	
@@ -123,18 +119,57 @@ public class BoardController {
 	
 	// 게시물 수정폼
 	@RequestMapping("/boardModifyForm")
-	public String boardModifyForm(String seq, BoardVO boardVO, MemberVO memberVO, Model model ) {
+	public String boardModifyForm( BoardVO board, Model model ) throws Exception {
+		model.addAttribute("board", boardService.selectBoard(board));
 		
-		model.addAttribute("board", boardService.selectBoard(boardVO));
-		System.out.println(boardService.selectBoard(boardVO));
+		//해쉬태그 배열 -> String 값으로 담아서 input Value값으로 전달.
+		List<HashTagVO> hashTag =  boardService.selectHashTags(board.getSeq());
+		String result = "";
+		for(int i=0; i<hashTag.size(); i++) {
+			System.out.println(hashTag.get(i).getTagName()); 
+			if(i==hashTag.size()-1) {
+				result += "#" + hashTag.get(i).getTagName();	
+			}else {
+				result += "#" + hashTag.get(i).getTagName() + ", " ;	
+			}
+		}
+		model.addAttribute("hashTag", result);
 		return "/board/boardModify";
 	}
 	// 게시물 수정
 	@RequestMapping("/boardModify")
-	public String boardModify(BoardVO board, Model model, String seq) {
-		System.out.println("뭐가 넘어올까나 : " + board);
-		model.addAttribute("seq", seq);
+	public String boardModify(BoardVO board, Model model, HashTagVO vo) throws Exception {
+		model.addAttribute("seq", board.getSeq());
 		boardService.boardModify(board);
+		boardService.boardHashtagDelete(board.getSeq());
+		//공백, 콤마, # 제거
+				String hashtags = vo.getTagName().replace(" ", "").replace(",", "");
+				String tagName[] = hashtags.split("#");
+				System.out.println( "tagName 값 : " +tagName);
+				
+				for(int i=1; i<tagName.length; i++) {
+					System.out.println("tagName["+i+"] :  " +   tagName[i]);
+					try {
+						//중복조회
+						String result = boardService.readHashtag(tagName[i]);
+						System.out.println("결과값은???    "+result);
+						
+						//기존 해쉬태그에서 조회값이 없으면 새로 생성
+						if(result==null) {
+						vo.setTagName(tagName[i]);
+						boardService.hashtagInsert(vo);
+						}
+						System.out.println("tagNane?:  " +tagName[i] + "  tagId?:  "+boardService.readHashtag(tagName[i]) );
+						//참조테이블 생성
+						vo.setSeq(board.getSeq());
+						vo.setTagId(boardService.readHashtag(tagName[i]));
+						boardService.boardHashtagInsert(vo);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+		
+		
 		return	"redirect:/boardRead";
 	}
 	

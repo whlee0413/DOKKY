@@ -4,7 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
-<div class="container">
 <script>
 	function accountDelete(){
 		  
