@@ -53,7 +53,7 @@ public interface BoardMapper {
     //게시글-해쉬태그조회
     public  List<HashTagVO> selectHashTags(String seq) throws Exception;
     //해쉬태그중복값조회
-    public String readHashtag(String tagName) throws Exception;
+    public HashTagVO readHashtag(String tagName) throws Exception;
     //해쉬태그복합키 생성
     public void boardHashtagInsert(HashTagVO hashtagVO);
     //해쉬태그 생성

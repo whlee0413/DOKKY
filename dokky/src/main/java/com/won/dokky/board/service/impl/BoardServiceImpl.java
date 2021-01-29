@@ -137,7 +137,7 @@ public class BoardServiceImpl implements BoardService{
 
 	//해쉬태그조회
 	@Override
-	public String readHashtag(String tagName) throws Exception {
+	public HashTagVO readHashtag(String tagName) throws Exception {
 		return mapper.readHashtag(tagName);
 	}
 

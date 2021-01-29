@@ -6,29 +6,51 @@
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <script>
-function modifyFocus(rseqParam) {
-	var rseqVal = $('input[name='+rseqParam+']').val();
-	var replyArea = document.getElementById('replyContent');
-	var seqData = ${board.seq};
-		$.ajax({
-			url : '/boardReplySelect',
-			type : 'get',
-			data : {seq:seqData, rseq:rseqVal},
-			success : function(datas){
-				console.log(datas.content)
-				replyArea.innerHTML = datas.content ;
-				replyArea.focus();
-				datas.content = "";
-				document.getElementById("replyInsertButton").value = "수정";
-				var contentVal = $("#replyContent").val();
-				document.getElementById("replyInsert").action = "/boardReplyModify?seq="+datas.seq+"&rseq="+datas.rseq;
-				
-			},
-			error:function(request,status,error){
-			    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
+	function modifyFocus(rseqParam) {
+		var rseqVal = $('input[name='+rseqParam+']').val();
+		var replyArea = document.getElementById('replyContent');
+		var seqData = ${board.seq};
+			$.ajax({
+				url : '/boardReplySelect',
+				type : 'get',
+				data : {seq:seqData, rseq:rseqVal},
+				success : function(datas){
+					console.log(datas.content)
+					replyArea.innerHTML = datas.content ;
+					replyArea.focus();
+					datas.content = "";
+					$('#replyInsertButton').html('수정');
+					var contentVal = $("#replyContent").val();
+					document.getElementById("replyInsert").action = "/boardReplyModify?seq="+datas.seq+"&rseq="+datas.rseq;
+					
+				},
+				error:function(request,status,error){
+				    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
+	
+			})
+	} 
+	
+	function replyCheck(){
+		if(replyInsert.replyContent.value == ""){
+			alert("내용을 입력하세요.")
+			replyInsert.replyContent.focus();
+			return;
+		}
+		replyInsert.submit();
+	}
 
-		})
-} 
+	function boardDelete(){
+		  
+        if ( confirm("게시글을 삭제하시겠습니까?") ) {
+            location.href="boardDelete?seq=${board.seq}&category=${board.category}";
+        } else {
+           return;
+        }
+    }
+	
+	
+	
+	
 </script> 
 <div class="row">
 	<!-- Begin Page Content -->
@@ -90,9 +112,9 @@ function modifyFocus(rseqParam) {
 							<c:set var="memId" value="${login.memId}" />
 							<c:set var="writer" value= "${board.writer}" />
 							<c:if test="${memId == writer}">
-							<div>
-								<a href="boardDelete?seq=${board.seq}&category=${board.category}"><i class="fa fa-trash" aria-hidden="true"></i>삭제</a>
-							</div>
+								<div>
+									<a href="javascript:void(0);" onclick="boardDelete();" ><i class="fa fa-trash" aria-hidden="true"></i>삭제</a>
+								</div>
 							</c:if>
 						</div>
 					</div>
@@ -160,11 +182,13 @@ function modifyFocus(rseqParam) {
 										<input type="hidden" id="content" value="${replyList.content}">
 									</li>
 								</c:forEach>
+					
 						<!--  댓글 달기 -->
 						<br/>
 						<h4>${login.memId }</h4>
-						<form id="replyInsert" action="/boardReplyInsert?seq=${board.seq }" method= "post" > 
+						<form id="replyInsert" action="/boardReplyInsert" method= "post" > 
 						    <input type="hidden" name="memId" value="${login.memId}" ></input>
+						    <input type="hidden" name="seq" value="${board.seq}" ></input>
 	   						<c:choose>
 		   						<c:when test="${empty memId }">
 			   						<textarea id="replyContent" cols="30" rows="10" name="content"  class="form-control" style="width: 800px; display: inline;" placeholder="로그인 해주세요." readonly></textarea>
@@ -173,8 +197,8 @@ function modifyFocus(rseqParam) {
 		   							<textarea id="replyContent" cols="30" rows="10" name="content"  class="form-control" style="width: 800px; display: inline;" placeholder="내용을 입력하세요."></textarea>
 		   						</c:when>
 	   						</c:choose>
-							<input id="replyInsertButton" type="submit" value="등록">
-						</form>	
+							<button class="btn btn-primary" id="replyInsertButton" type="button" onclick="replyCheck()" >등록</button>
+							</form>	
 											
 							</ol>
 						</div>

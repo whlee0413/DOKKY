@@ -47,11 +47,11 @@
 
 <!-- 댓글 수정 -->	
 	 <update id="boardReplyModify" parameterType="BoardReplyVO">
-        UPDATE boardReply
+        UPDATE	 	boardReply
             SET
-            CONTENT = #{content}
-        WHERE 	seq  = #{seq}	AND
-        		rseq = #{rseq}
+            		 CONTENT = #{content}
+          WHERE 		seq  = #{seq}	AND
+        				rseq = #{rseq}
     </update>
 
 

@@ -65,23 +65,23 @@ public class BoardController {
 	}
 	
 	// 게시글 등록	
-	@RequestMapping("/boardInsert")
+	@RequestMapping(value = "/boardInsert", method = RequestMethod.POST)
 	public String boardInsert(BoardVO board, HttpSession session, Model model
 							, @RequestParam(value="category", required=false) String category
 							, HashTagVO vo) throws Exception {
 		//category를 redirect 뒤로 같이 보냄
 		model.addAttribute("category",category);
-		boardService.boardInsert(board);
+		boardService.boardInsert(board); 
 		//공백, 콤마, # 제거
 		String hashtags = vo.getTagName().replace(" ", "").replace(",", "");
-		String tagName[] = hashtags.split("#");
+		String[] tagName = hashtags.split("#");
 		System.out.println( "tagName 값 : " +tagName);
 		
 		for(int i=1; i<tagName.length; i++) {
 			System.out.println("tagName["+i+"] :  " +   tagName[i]);
 			try {
 				//중복조회
-				String result = boardService.readHashtag(tagName[i]);
+				HashTagVO result = boardService.readHashtag(tagName[i]);
 				System.out.println("결과값은???    "+result);
 				
 				//기존 해쉬태그에서 조회값이 없으면 새로 생성
@@ -92,7 +92,7 @@ public class BoardController {
 				System.out.println("tagNane?:  " +tagName[i] + "  tagId?:  "+boardService.readHashtag(tagName[i]) );
 				//참조테이블 생성
 				vo.setSeq(boardService.boardMaxSeq());
-				vo.setTagId(boardService.readHashtag(tagName[i]));
+				vo.setTagId(boardService.readHashtag(tagName[i]).getTagId());
 				boardService.boardHashtagInsert(vo);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -137,7 +137,7 @@ public class BoardController {
 		return "/board/boardModify";
 	}
 	// 게시물 수정
-	@RequestMapping("/boardModify")
+	@RequestMapping(value = "/boardModify", method = RequestMethod.POST)
 	public String boardModify(BoardVO board, Model model, HashTagVO vo) throws Exception {
 		model.addAttribute("seq", board.getSeq());
 		boardService.boardModify(board);
@@ -151,7 +151,7 @@ public class BoardController {
 					System.out.println("tagName["+i+"] :  " +   tagName[i]);
 					try {
 						//중복조회
-						String result = boardService.readHashtag(tagName[i]);
+						HashTagVO result = boardService.readHashtag(tagName[i]);
 						System.out.println("결과값은???    "+result);
 						
 						//기존 해쉬태그에서 조회값이 없으면 새로 생성
@@ -162,7 +162,7 @@ public class BoardController {
 						System.out.println("tagNane?:  " +tagName[i] + "  tagId?:  "+boardService.readHashtag(tagName[i]) );
 						//참조테이블 생성
 						vo.setSeq(board.getSeq());
-						vo.setTagId(boardService.readHashtag(tagName[i]));
+						vo.setTagId(boardService.readHashtag(tagName[i]).getTagId());
 						boardService.boardHashtagInsert(vo);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -186,7 +186,7 @@ public class BoardController {
 	}
 	
 	// 댓글 작성
-	@RequestMapping("/boardReplyInsert")
+	@RequestMapping(value = "/boardReplyInsert", method = RequestMethod.POST)
 	public String boardReplyInsert(BoardVO board, BoardReplyVO boardReply, HttpSession session, Model model
 							) {
 		//category를 redirect 뒤로 같이 보냄
@@ -216,12 +216,14 @@ public class BoardController {
 		
 		
 		//댓글 수정
-		@RequestMapping("/boardReplyModify")   
+		@RequestMapping( value = "/boardReplyModify", method =RequestMethod.POST)   
 	    public String boardReplyModify( BoardReplyVO boardReplyVO
-	    							 , @RequestParam("rseq") String rseq
-	    							 , @RequestParam("seq") String seq
 	    							 , Model model) throws Exception{
-	        boardService.boardReplyModify(boardReplyVO);
+			
+			//seq 중복으로 들어오는거 함수로 처리해보기.
+			String seq = boardReplyVO.getSeq().substring(0, boardReplyVO.getSeq().indexOf(","));
+			boardReplyVO.setSeq(seq);
+			boardService.boardReplyModify(boardReplyVO);
 	        model.addAttribute("seq", boardReplyVO.getSeq());
 	        return "redirect:boardRead";
 	    }

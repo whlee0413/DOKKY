@@ -2,7 +2,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<script>
+	function check(){
+		if(form.category.value == ""){
+			alert("게시판 종류를 선택해주세요.");
+			form.category.focus();
+			return;
+		}
+		if(form.title.value == ""){
+			alert("제목을 입력해주세요.");
+			form.title.focus();
+			return;
+		}
+		if(form.content.value == ""){
+			alert("내용을 입력해주세요.");
+			form.content.focus();
+			return;
+		}
+		form.submit();
+	}
+	
+</script>
 
 <div class="row">
                 <!-- Begin Page Content -->
@@ -24,32 +44,31 @@
                             <div class="table-responsive" align="center">
 	                              
 	                              
-	                                <form action="/boardInsert" method= "post" > 
+	                                <form action="/boardInsert" method= "post" id="form"> 
 								   <input type="hidden" name="writer" value="${login.memId}" readonly></input> 
 									<div>
 									 
-									 <select name="category" id="position" class="form-control" style="width: 800px; display: inline; text-align:center;" > 
+									 <select name="category" id="category" class="form-control" style="width: 800px; display: inline; text-align:center;" > 
 										<option value=""  selected>게시판을 선택해 주세요. </option>
-											<option value=""  >----커뮤니티---- </option>
+											<option value=""  disabled>----커뮤니티---- </option>
 												<c:set var="loginID" value="${login.memId}"/> 
 												<c:if test="${loginID == 'admin'}">  
 												<option value="notice">공지사항</option>
 												</c:if>
 												<option value="daily">사는얘기</option>
-											<option value=""  >------Q/A------- </option>
+											<option value=""  disabled>------Q/A------- </option>
 												<option value="tech">Tech</option>
 												<option value="job">Job</option>	
 									</select>
 									</div><br/>
-								      <input type ="text" name="title"  class="form-control" style="width: 800px; display: inline;" placeholder="제목을 입력하세요." ><br/>
-									<textarea cols="30" rows="10" name="content"  class="form-control" style="width: 800px; display: inline;" placeholder="내용을 입력하세요."></textarea><br/>
+								      <input type ="text" name="title" id="title" class="form-control" style="width: 800px; display: inline;" placeholder="제목을 입력하세요." ><br/>
+									<textarea cols="30" rows="10" name="content" id="content"  class="form-control" style="width: 800px; display: inline;" placeholder="내용을 입력하세요."></textarea><br/>
 									 <input type ="text" name="tagName"  class="form-control" style="width: 800px; display: inline;" placeholder="해쉬태그를 입력하세요.    ex) #ajax, #spring..." ><br/> 
 									  <br/>
 									  
 									  
 									   
-									
-									<input type="submit" value="등록">
+									<button class="btn btn-primary" type="button" onclick="check()" >등록</button>
 									
 									</form>
                             </div>

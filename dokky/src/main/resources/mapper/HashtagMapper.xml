@@ -4,7 +4,7 @@
 
 <!-- 해쉬태그 중복 조회 -->
 <select id="readHashtag" parameterType="String" resultType="HashTagVO">
-	SELECT  tagname
+	SELECT  *
 	FROM   hashtag
 	WHERE tagName  = #{tagName}
 </select>
