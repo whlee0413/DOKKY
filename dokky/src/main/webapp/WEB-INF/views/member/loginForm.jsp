@@ -8,11 +8,10 @@
 </script>
 
 <form action="/login" method="post" >
-    <div class="container">
+    <div class="container" style="width: 1000px">
 
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
-
+        <div class="card o-hidden border-0 shadow-lg my-5" style="width: 500px"   >
+ <div class="card-body"  >
 
                                 <div class="p-5">
                                     <div class="text-center">
@@ -20,7 +19,8 @@
                                     </div>
                                     
                                         <!-- 아이디 -->
-                                        <div class="form-group">
+                                        <div class="form-group ">
+                                        
                                             <input type="text" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter ID..." name="memId" onkeydown="onlyEng(this)">
@@ -28,7 +28,7 @@
                                         </div>
                                         
                                         <!-- 패스워드 -->
-                                        <div class="form-group">
+                                        <div class="form-group ">
                                             <input type="password" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Password" name="memPw">
                                                 ${wrongPw}
@@ -48,7 +48,7 @@
                                         <a class="small" href="joinForm">회원가입</a>
                                     </div>
                                 </div>
-                        
+                        </div>
         </div>
 
     </div>

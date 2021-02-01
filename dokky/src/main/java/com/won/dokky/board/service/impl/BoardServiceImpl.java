@@ -1,9 +1,13 @@
 package com.won.dokky.board.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.won.dokky.board.BoardReplyVO;
 import com.won.dokky.board.BoardVO;
@@ -11,6 +15,7 @@ import com.won.dokky.board.HashTagVO;
 import com.won.dokky.board.mapper.BoardMapper;
 import com.won.dokky.board.service.BoardService;
 import com.won.dokky.board.utils.SearchCriteria;
+import com.won.util.FileUtils;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -19,10 +24,25 @@ public class BoardServiceImpl implements BoardService{
 	private BoardMapper mapper;
 	
 	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
 
 	@Override
-	public void boardInsert(BoardVO board) {
+	public void boardInsert(BoardVO board, MultipartHttpServletRequest mpRequest) throws Exception{
 	 	mapper.boardInsert(board);
+	 	
+	 	
+	 	System.out.println("board는 :   " + board);
+	 	System.out.println("mpRequest는 :   " + mpRequest);
+	 	System.out.println("무슨값인가?? :   " + fileUtils.parseInsertFileInfo(board, mpRequest));
+	 	
+	 	List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(board, mpRequest);
+	 	int size = list.size();
+	 	for(int i=0; i<size; i++) {
+	 		
+	 		System.out.println("list [" +i+"]    :" + list.get(i));
+	 		mapper.insertFile(list.get(i));
+	 	}
 		
 	}
 	
@@ -53,10 +73,27 @@ public class BoardServiceImpl implements BoardService{
 
 	//게시물수정
 	@Override
-	public void boardModify(BoardVO board) {
+	public void boardModify(BoardVO board,  
+							String[] files, 
+							String[] fileNames, 
+							MultipartHttpServletRequest mpRequest) throws Exception {
 		mapper.boardModify(board);
+		
+		//업뎃파일 리스트에 담음
+		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(board, files, fileNames, mpRequest);
+		Map<String, Object> tempMap = null;
+		int size = list.size();
+		
+
+		for(int i = 0; i<size; i++) {		//리스트 결과 사이즈만큼 돌림
+			tempMap = list.get(i);
+			if(tempMap.get("IS_NEW").equals("Y")) {
+				mapper.insertFile(tempMap);
+			}else {
+				mapper.updateFile(tempMap);
+			}
+		}
 	}
-	
 
 	//게시물삭제
 	@Override
@@ -180,6 +217,20 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<HashTagVO> boardHashTags() throws Exception {
 		return mapper.boardHashTags();
+	}
+
+
+	//첨부파일조회
+	@Override
+	public List<Map<String, Object>> selectFileList(String seq) throws Exception {
+		return mapper.selectFileList(seq);
+	}
+
+
+	//첨부파일다운로드
+	@Override
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception {
+		return mapper.selectFileInfo(map);
 	}
 
 

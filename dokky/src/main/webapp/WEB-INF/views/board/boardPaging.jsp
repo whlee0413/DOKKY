@@ -11,16 +11,7 @@
  
  <script>
 	
-/* 	//글쓰기 로그인체크
-	function check() {
-	 	  var id = "<c:out value='${login.memId}'/>"; 
-		if(id ==""){
-			alert("로그인해주세요");
-			return;
-		}else{ 
-			location.href = "/boardInsertForm";
-		} 
-	} */
+
 	
 	
 	//페이징
@@ -39,7 +30,7 @@
 	
 	
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="width: 1000px">
 
                     <!-- Page Heading -->
                    

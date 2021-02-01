@@ -16,6 +16,8 @@
 	FROM board
 </select>
 
+
+
 <!-- 게시물 리스트 -->
 	<select id="list" resultType="BoardVO" parameterType="SearchCriteria">
 		SELECT  *
@@ -54,7 +56,11 @@
 
 	
 <!--  게시글 등록 -->
-	<insert id="boardInsert" parameterType="BoardVO" >
+	<insert id="boardInsert" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="seq">
+		<selectKey keyProperty="seq" resultType="String" order="BEFORE">
+			SELECT BOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		
 		INSERT INTO board(
 		seq, 
 		title,
@@ -64,7 +70,7 @@
 		category
 		)
 		VALUES(
-		(SELECT NVL(MAX(seq),0)+1 FROM board),
+		#{seq},
 		#{title, jdbcType=VARCHAR},
 		#{writer, jdbcType=VARCHAR},
 		#{content, jdbcType=VARCHAR},
@@ -134,7 +140,53 @@
 			          ORDER BY tagname_count desc) 
 		WHERE rownum <![CDATA[ <=]]> 20
 </select>
-	
+
+<!-- 첨부파일등록 -->
+ <insert id="insertFile" parameterType="hashMap">
+		INSERT INTO board_file (
+			FILE_NO,
+			SEQ,
+			ORG_FILE_NAME,
+			STORED_FILE_NAME,
+			FILE_SIZE
+		)VALUES(
+			seq_mp_file_no.NEXTVAL,
+			#{SEQ},
+			#{ORG_FILE_NAME},
+			#{STORED_FILE_NAME},
+			#{FILE_SIZE}
+		)
+    </insert>
+
+<!-- 첨부파일 조회 -->
+<select id="selectFileList" parameterType="String" resultType="hashMap">
+	SELECT FILE_NO,
+		   ORG_FILE_NAME,
+		   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+	  FROM BOARD_FILE
+	 WHERE SEQ = #{SEQ}
+	   AND DEL_GB = 'N'
+	  ORDER BY FILE_NO ASC
+</select>
+
+<!-- 첨부파일 다운 -->
+<select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
+	SELECT 
+		STORED_FILE_NAME,
+		ORG_FILE_NAME
+	FROM BOARD_FILE
+	WHERE FILE_NO = #{FILE_NO}
+</select>
+
+<!-- 첨부파일 수정 -->
+ <update id="updateFile" parameterType="hashMap">
+    	UPDATE BOARD_FILE SET
+    			DEL_GB = 'Y'
+    	WHERE FILE_NO = #{FILE_NO}
+    </update>
+    
+    
+    
 <!-- SQL 조각 모음 -->	
 	<sql id="category">
 			<choose>

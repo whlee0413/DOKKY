@@ -1,6 +1,9 @@
 package com.won.dokky.board.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.won.dokky.board.BoardReplyVO;
 import com.won.dokky.board.BoardVO;
@@ -9,9 +12,9 @@ import com.won.dokky.board.utils.SearchCriteria;
 
 public interface BoardService {
 	//게시물 작성
-	public void boardInsert(BoardVO board);
+	public void boardInsert(BoardVO board, MultipartHttpServletRequest mpReqeust) throws Exception;
 	//게시물 수정
-	public void boardModify(BoardVO board);
+	public void boardModify(BoardVO board, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws Exception;
 	// 게시물삭제
 	public void boardDelete(String seq) throws Exception;
 	//게시물 삭제할 때의 댓글 삭제
@@ -26,6 +29,12 @@ public interface BoardService {
 	public int listCount(SearchCriteria scri) throws Exception; 
 	// 조회수
 	public boolean plusCnt(String seq);
+	
+	// 첨부파일 조회
+	public List<Map<String, Object>> selectFileList(String seq) throws Exception;
+	// 첨부파일 다운
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception;
+	
 	// 댓글조회
 	public List<BoardReplyVO> readReply(String seq) throws Exception;	
 	// 댓글 갯수

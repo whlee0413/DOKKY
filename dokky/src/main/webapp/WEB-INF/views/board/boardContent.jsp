@@ -20,23 +20,48 @@
 					replyArea.focus();
 					datas.content = "";
 					$('#replyInsertButton').html('수정');
-					var contentVal = $("#replyContent").val();
 					document.getElementById("replyInsert").action = "/boardReplyModify?seq="+datas.seq+"&rseq="+datas.rseq;
+					
 					
 				},
 				error:function(request,status,error){
 				    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
-	
 			})
+	} 
+	
+	function replyDelete(rseqParam) {
+		var rseqVal = $('input[name='+rseqParam+']').val();
+
+		if(confirm("댓글을 삭제하시겠습니까?")){
+			location.href="/boardReplyDelete?seq=${board.seq}&rseq="+ rseqVal;
+		} else {
+			return;
+		}
+		
 	} 
 	
 	function replyCheck(){
 		if(replyInsert.replyContent.value == ""){
 			alert("내용을 입력하세요.")
 			replyInsert.replyContent.focus();
-			return;
+			
+		}else{
+			if($('#replyInsertButton').html() == '수정'){
+				if(confirm("댓글을 수정하시겠습니까?")){
+					replyInsert.submit();					
+				}else{
+					return;
+				}
+					
+			}else{
+				if(confirm("댓글을 등록하시겠습니까?")){
+					replyInsert.submit();					
+				}else{
+					return;
+				}
+			}			
 		}
-		replyInsert.submit();
+		
 	}
 
 	function boardDelete(){
@@ -48,13 +73,19 @@
         }
     }
 	
-	
+	//파일다운로드
+	function fn_fileDown(fileNo){
+		var formObj = $("form[name='readForm']");
+		$("#FILE_NO").attr("value", fileNo);
+		formObj.attr("action", "/fileDown");
+		formObj.submit();
+	}
 	
 	
 </script> 
-<div class="row">
+<div class="row" >
 	<!-- Begin Page Content -->
-	<div class="container-fluid">
+	<div class="container-fluid" style="width: 1000px">
 
 		<!-- Page Heading -->
 
@@ -134,6 +165,17 @@
 								${board.content}
 							</article><br/><br/><br/>
 						
+						<span>첨부파일 목록</span>
+							<div class="form-group" style="border: 1px solid #dbdbdb;">
+								<c:forEach var="file" items="${file}">
+									<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>
+								</c:forEach>
+							</div>
+						<!-- 파일다운로드 -->
+						<form name="readForm" role="form" method="post">
+							<input type="hidden" id="FILE_NO" name="FILE_NO" value="">
+						</form>
+						
 						<!-- 해쉬태그 -->
 							<c:forEach items="${hashTagList}" var="hashTag" >
 							<a href="/boardList?tagName=${hashTag.tagName}">#${hashTag.tagName} </a>
@@ -166,9 +208,12 @@
 											<c:set var="writer" value="${replyList.writer}" />
 											<c:set var="memId" value="${login.memId}" />
 												<c:if test="${writer == memId}">
-													<a href="/boardReplyDelete?seq=${board.seq}&rseq=${replyList.rseq}">
+													
+													
+													<a href="javascript:void(0);" onclick="replyDelete(${status.index});" > 
 														<i class="fa fa-trash" aria-hidden="true">삭제</i>
 													</a>
+													
 													
 													<input type="hidden" value="${replyList.rseq }" name="${status.index}">
 													

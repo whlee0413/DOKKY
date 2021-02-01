@@ -12,7 +12,7 @@
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">  ${member.memId} 님 회원가입을 축하합니다!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">  ${login.memId} 님 회원가입을 축하합니다!</h1>
 								<a href="/">메인페이지</a>
                             </div>
                             <hr>

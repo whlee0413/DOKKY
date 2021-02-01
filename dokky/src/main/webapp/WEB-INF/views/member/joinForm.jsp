@@ -8,6 +8,14 @@
 <script>
 		// ID 유효성검사
 		function checkId(){
+			$('#user_id').blur(function(){
+			 var idReg = /^[a-z]+[a-z0-9]{5,19}$/g;
+		        if( !idReg.test( $('#user_id').val() ) ) {
+		        	 $('#chkMsg').html("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");  
+		            return;
+		        }
+			})
+			
 		    var id = $('#user_id').val();
 		    $.ajax({
 		        url:'/idCheck',
@@ -17,7 +25,7 @@
 		            if($.trim(data)==0){
 		                $('#chkMsg').html("사용가능");                
 		            }else{
-		                $('#chkMsg').html("사용불가");
+		                $('#chkMsg').html("이미 존재하는 ID입니다.");
 		            }
 		        },
 		        error:function(request,status,error){
@@ -26,6 +34,7 @@
 
 
 		    });
+			
 		};
 		
 		//비밀번호 확인
@@ -42,7 +51,7 @@
 			});
 </script>
 
-  		<div class="container">					
+  		<div class="container" style="width: 1000px">					
   <div class="card o-hidden border-0 shadow-lg my-5" style="width: 500px"  >
             <div class="card-body"  >
                 <!-- Nested Row within Card Body -->

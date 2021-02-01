@@ -12,35 +12,35 @@
 		memPw, 
 		memMail)
 		VALUES(
-		#{memId},
-		#{memPw},
-		#{memMail}
+		LOWER(#{memId}),
+		LOWER(#{memPw}),
+		LOWER(#{memMail})
 		)
 	</insert>
 	<select id="memberSelect" parameterType="MemberVO" resultType="MemberVO">
 		SELECT * 
 		FROM member 
-		WHERE memId = #{memId} AND memPw = #{memPw}
+		WHERE LOWER(memId) = LOWER(#{memId}) AND LOWER(memPw) = LOWER(#{memPw})
 	</select>
 
 <!-- id중복체크. 결과는 1 또는 0 이기때문에 int -->	
 	<select id="memberIdCheck" parameterType="String" resultType="int">
 		SELECT count(*) 
 		FROM member
-		WHERE memId = #{memId}
+		WHERE LOWER(memId) = LOWER(#{memId})
 	</select>
 	
 	<update id="memberUpdate" parameterType="MemberVO">
 		UPDATE member
 	<set>
-		<if test="memPw !=null">memPw= #{memPw}, </if> 
-		<if test="memMail !=null">memMail= #{memMail}</if>
+		<if test="memPw !=null">memPw= LOWER(#{memPw}), </if> 
+		<if test="memMail !=null">memMail= LOWER(#{memMail})</if>
 	</set>
-		WHERE memId = #{memId}
+		WHERE LOWER(memId) = LOWER(#{memId})
 	</update>
 	
 	<delete id="memberDelete" parameterType="MemberVO">
 		DELETE FROM member
-		WHERE memId = #{memId}
+		WHERE LOWER(memId) = LOWER(#{memId})
 	</delete>
 </mapper>

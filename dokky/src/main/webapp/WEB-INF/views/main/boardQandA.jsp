@@ -33,7 +33,22 @@
     
     /** 게시판 - 목록 조회  콜백 함수 */
     function getBoardListCallback2(obj){
-        
+    	 var date = new Date();
+         var year = date.getFullYear();
+         var month = date.getMonth()+1;
+         var day = date.getDate();
+         
+         if ((day+"").length < 2) {       // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
+             day = "0" + day;
+         }
+         if ((month+"").length < 2) {     
+             month = "0" + month;
+         }
+         var getToday = month+"-"+day;
+         var getThisMonth = parseInt(getToday.substring(0,2));
+         var getThisDay = parseInt(getToday.substring(3,5)); 
+         
+         
         var list = obj;
         var listLen = obj.length;
                 
@@ -48,21 +63,28 @@
                 var boardWriter        = list[a].writer;
                 var boardRegDate       = list[a].regdate; 
                
+                var regMonth = parseInt(boardRegDate.substring(5,7));
+                var regDay = parseInt(boardRegDate.substring(8,10));
+                
+                var monthGap =  getThisMonth-regMonth;
+                var dayGap =  getThisDay-regDay;
+                var dateGap = "";
+                
+                if(monthGap == 0 && dayGap == 0 ){
+             	   dateGap = "오늘";
+                }else if( monthGap == 0 && dayGap > 0){
+             	   dateGap = dayGap +"일전";
+                }else{
+             	   dateGap = monthGap +"개월전";
+                }
+
                 str += "<tr onclick='javascript:goBoardDetail2("+ boardSeq +");' style='cursor:Pointer'>";
                 str += "<td width='80px' style='color:blue;' >"+ boardTitle +"</td>";
                 str += "<td width='10px'>"+ boardWriter +"</td>";
-                str += "<td width='30px'>"+ boardRegDate +"</td>";
+                str += "<td width='30px'>"+ dateGap +"</td>";
                 str += "</tr>";
-                
             } 
-            
-        } else {
-            
-            str += "<tr>";
-            str += "<td colspan='5'>등록된 글이 존재하지 않습니다.</td>";
-            str += "<tr>";
-        }
-        
+        } 
         $("#tbody2").html(str);
     }
 	

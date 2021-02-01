@@ -1,6 +1,7 @@
 package com.won.dokky.board.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -22,12 +23,22 @@ public interface BoardMapper {
 	public BoardVO selectBoard(BoardVO board);
 	// 가장 최근 게시물 조회
 	public String boardMaxSeq() throws Exception;
-	// 페이징 테스트
+	// 리스트(페이징)
 	public List<BoardVO> list(SearchCriteria scri) throws Exception;
-	// 총게시물 테스트. 검색기능에서 쓰기 위해서 scri 넘겨줌.
+	// 총게시물. 검색기능에서 쓰기 위해서 scri 넘겨줌.
 	public int listCount(SearchCriteria scri) throws Exception; 
 	// 조회수	
 	public boolean plusCnt(String seq);
+	
+	// 첨부파일 업로드
+	public void insertFile(Map<String,Object> map) throws Exception;
+	// 첨부파일 조회
+	public List<Map<String, Object>> selectFileList(String seq) throws Exception;
+	// 첨부파일 다운
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws Exception;
+	// 첨부파일 수정
+	public void updateFile(Map<String, Object> map) throws Exception;
+	
 	// 댓글조회	
 	public List<BoardReplyVO> readReply(String seq) throws Exception;
 	// 댓글 갯수
