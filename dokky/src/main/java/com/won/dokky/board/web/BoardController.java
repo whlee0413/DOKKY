@@ -157,9 +157,6 @@ public class BoardController {
 							  @RequestParam(value="fileNameDel[]") String[] fileNames,
 							  MultipartHttpServletRequest mpRequest) throws Exception {
 		
-		System.out.println("files : " + files);
-		System.out.println("fileNames : " + fileNames);
-		System.out.println("mpRequest : " + mpRequest);
 		model.addAttribute("seq", board.getSeq());
 		boardService.boardModify(board, files, fileNames, mpRequest);
 		boardService.boardHashtagDelete(board.getSeq());

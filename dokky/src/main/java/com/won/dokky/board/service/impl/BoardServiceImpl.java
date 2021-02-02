@@ -32,10 +32,6 @@ public class BoardServiceImpl implements BoardService{
 	 	mapper.boardInsert(board);
 	 	
 	 	
-	 	System.out.println("board는 :   " + board);
-	 	System.out.println("mpRequest는 :   " + mpRequest);
-	 	System.out.println("무슨값인가?? :   " + fileUtils.parseInsertFileInfo(board, mpRequest));
-	 	
 	 	List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(board, mpRequest);
 	 	int size = list.size();
 	 	for(int i=0; i<size; i++) {

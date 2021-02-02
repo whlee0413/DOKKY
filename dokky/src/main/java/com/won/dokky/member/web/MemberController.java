@@ -19,8 +19,6 @@ import com.won.dokky.member.service.MemberService;
 @Controller
 public class MemberController {
 
-//	순수 자바방식 : MemberService service = new MemberService(); 
-// 	Spring 자동주입방식 : service에 annotation 달면 servlet container에 자동 생성, 그냥 여기서 autowired로 가져다 쓰기만 하면됨.
 	
 	@Autowired
 	MemberService memberService;
