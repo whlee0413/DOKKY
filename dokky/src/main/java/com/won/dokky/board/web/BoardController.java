@@ -34,7 +34,7 @@ public class BoardController {
 	
 	@Autowired
 	MemberService memberService;
-
+	
 	
 	//페이징 리스트
 	@RequestMapping(value = "/boardList", method = RequestMethod.GET)
@@ -43,7 +43,7 @@ public class BoardController {
 		  //@ModelAttribute 어노테이션이 붙은 객체가 (scri객체) 자동으로 Model객체에 추가되고 뷰단으로 전달된다.
 		 //@ModelAttribute("scri") SearchCriteria scri 에서 괄호안에있는 scri 값을 통해서 뷰단에서 데이터들을 호출할수있다.
 
-		System.out.println("category :    " + category);
+		
 		
 		PageMaker pageMaker = new PageMaker();
 		
@@ -56,7 +56,6 @@ public class BoardController {
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("list", boardService.list(scri));
 		
-		System.out.println("리스트 결과값 : " +boardService.list(scri));
 		
 		
 		return "/board/boardPaging";
@@ -81,14 +80,11 @@ public class BoardController {
 		//공백, 콤마, # 제거
 		String hashtags = vo.getTagName().replace(" ", "").replace(",", "");
 		String[] tagName = hashtags.split("#");
-		System.out.println( "tagName 값 : " +tagName);
 		
 		for(int i=1; i<tagName.length; i++) {
-			System.out.println("tagName["+i+"] :  " +   tagName[i]);
 			try {
 				//중복조회
 				HashTagVO result = boardService.readHashtag(tagName[i]);
-				System.out.println("결과값은???    "+result);
 				
 				//기존 해쉬태그에서 조회값이 없으면 새로 생성
 				if(result==null) {
@@ -163,21 +159,17 @@ public class BoardController {
 		//공백, 콤마, # 제거
 				String hashtags = vo.getTagName().replace(" ", "").replace(",", "");
 				String tagName[] = hashtags.split("#");
-				System.out.println( "tagName 값 : " +tagName);
 				
 				for(int i=1; i<tagName.length; i++) {
-					System.out.println("tagName["+i+"] :  " +   tagName[i]);
 					try {
 						//중복조회
 						HashTagVO result = boardService.readHashtag(tagName[i]);
-						System.out.println("결과값은???    "+result);
 						
 						//기존 해쉬태그에서 조회값이 없으면 새로 생성
 						if(result==null) {
 						vo.setTagName(tagName[i]);
 						boardService.hashtagInsert(vo);
 						}
-						System.out.println("tagNane?:  " +tagName[i] + "  tagId?:  "+boardService.readHashtag(tagName[i]) );
 						//참조테이블 생성
 						vo.setSeq(board.getSeq());
 						vo.setTagId(boardService.readHashtag(tagName[i]).getTagId());
@@ -210,8 +202,6 @@ public class BoardController {
 		//category를 redirect 뒤로 같이 보냄
 		model.addAttribute("seq",board.getSeq());
 		
-		System.out.println( "board : " +board);
-		System.out.println( "boardReply : " +boardReply);
 		boardReply.setWriter(board.getMemId());
 		boardReply.setSeq(board.getSeq());
 		
@@ -224,7 +214,6 @@ public class BoardController {
 		@RequestMapping("/boardReplyDelete")
 		public String boardReplyDelete(BoardVO board, BoardReplyVO boardReplyVO, Model model) throws Exception {
 
-			System.out.println( "boardReplyVO : " +boardReplyVO);
 			
 			boardService.boardReplyDelete(boardReplyVO.getSeq(), boardReplyVO.getRseq());
 			model.addAttribute("category",board.getSeq());
@@ -261,7 +250,6 @@ public class BoardController {
 		@RequestMapping("/boardCummunity")
 		@ResponseBody
 		public List<BoardVO> boardCummunity() throws Exception{
-			System.out.println("asdasdasdas"+boardService.boardCummunity());
 			return boardService.boardCummunity();
 		}
 		

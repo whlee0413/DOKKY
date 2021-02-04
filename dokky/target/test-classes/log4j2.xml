@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<!-- 출력 방향에 대한 설정들: console, file -->
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- 출력 형태 -->
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</Appenders>
+	<!-- 대상별 레벨 및 출력 방향 설정 -->
+	<Loggers>
+		<!-- root는 전체를 대상으로 한다. -->
+		<Root level="info">
+			<AppenderRef ref="Console" />
+		</Root>
+		<!-- 패키지 별로 레벨과 출력 방향을 조절할 수 있다. -->
+		<Logger name="org.springframework" level="info">
+			<AppenderRef ref="Console" />
+		</Logger>
+	</Loggers>
+</Configuration>

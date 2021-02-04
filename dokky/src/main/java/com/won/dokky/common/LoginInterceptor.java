@@ -19,9 +19,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		
 		String path = request.getServletPath();
 		String pathCheck = "/boardReplyInsert";
-		System.out.println("pathCheck : " +pathCheck);
 		String query = request.getQueryString();
-		System.out.println("query : " +query);
 		
 		Object obj = session.getAttribute("login");
 		
@@ -34,7 +32,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}else {
 			session.setAttribute("prev_url", path);
 		}
-		System.out.println("path : " +path);
 			
 		
 		if(obj != null) {

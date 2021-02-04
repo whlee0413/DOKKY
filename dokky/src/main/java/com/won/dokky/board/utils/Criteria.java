@@ -1,6 +1,6 @@
 package com.won.dokky.board.utils;
 
-//파라미터들을 맡아서 관리하는 클래스. djqtdmaus @RequestParam 으로 매개변수 받아서 복잡해지고 많아짐. 클래스로 넘기면됨
+//파라미터들을 맡아서 관리하는 클래스.  @RequestParam 으로 매개변수 받아서 복잡해지고 많아짐. 클래스로 넘기면됨
 public class Criteria {
 
 	private int page;

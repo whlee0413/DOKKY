@@ -1,10 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <!-- 아이디 영문입력 -->
 <script>
-	function onlyEng(eng) {
-	  eng.value = eng.value.replace(/[^\\!-z]/gi,"");
-  }
+function onlyAlphabet(ele) {
+	  ele.value = ele.value.replace(/[^\\!-z]/gi,"");
+}
+	
+	
+	
+
+
 </script>
 
 <form action="/login" method="post" >
@@ -22,8 +32,8 @@
                                         <div class="form-group ">
                                         
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter ID..." name="memId" onkeydown="onlyEng(this)">
+                                                id="exampleInputEmail" 
+                                                placeholder="Enter ID..." name="memId" onkeydown="onlyAlphabet(this)">
                                                 ${wrongId}
                                         </div>
                                         
