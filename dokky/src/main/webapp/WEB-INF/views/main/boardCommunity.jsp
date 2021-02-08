@@ -51,7 +51,7 @@
         
         var getThisMonth = parseInt(getToday.substring(0,2));
         var getThisDay = parseInt(getToday.substring(3,5)); 
-        console.log("getThisMonth : "+ getThisMonth);
+
         
         var list = obj;
         var listLen = obj.length;
@@ -72,15 +72,16 @@
                var regDay = parseInt(boardRegDate.substring(8,10));
                
                var monthGap =  getThisMonth-regMonth;
-               var dayGap =  getThisDay-regDay+30;
+               var dayGap =  getThisDay-regDay;
                var dateGap = "";
-               
+
                if(monthGap == 0 && dayGap == 0 ){
             	   dateGap = "오늘";
-               }else if( dayGap <= 31){
-            	   dateGap = dayGap +"일전";
-               }else if( monthGap >=1 && dayGap >=30){
-            	   dateGap = monthGap +"개월전";
+               }else if(monthGap == 00 && dayGap > 0 && dayGap <31 ){
+            	   dateGap = dayGap + "일전";
+            	   
+               }else if(monthGap >=1 ){
+            	   dateGap = monthGap + "개월전";
                }
                 
                 str += "<tr onclick='javascript:goBoardDetail("+ boardSeq +");' style='cursor:Pointer'>";

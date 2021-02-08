@@ -6,8 +6,23 @@ public class SearchCriteria extends Criteria{
 	private String keyword = "";
 	public String tagName;
 	public String tagId;
+	public String category;
+	public String memId;
 	
-	 
+	
+	
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public String getTagId() {
 		return tagId;
 	}
@@ -35,7 +50,7 @@ public class SearchCriteria extends Criteria{
 	@Override
 	public String toString() {
 		return "SearchCriteria [searchType=" + searchType + ", keyword=" + keyword + ", tagName=" + tagName + ", tagId="
-				+ tagId + "]";
+				+ tagId + ", category=" + category + ", memId=" + memId + "]";
 	}
 	
 }

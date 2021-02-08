@@ -99,7 +99,7 @@
 					<div class="panel-heading clearfix">
 						<div class="avatar clearfix avatar-medium pull-left">
 							<div class="avatar-info">
-								<h3>${board.writer}</h3>
+								<h3><a href="/writerBoardList?memId=${board.writer}">${board.writer}</a></h3>
 								
 								<div class="date-created">
 									<span class="timeago">${board.regdate}</span> 작성

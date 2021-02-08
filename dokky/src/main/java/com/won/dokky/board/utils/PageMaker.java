@@ -3,9 +3,11 @@ package com.won.dokky.board.utils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Repository
 public class PageMaker {
 	private int totalCount;
 	private int startPage;
@@ -88,12 +90,12 @@ public class PageMaker {
 	}
 
 	private void calcData() {
-		endPage = (int) (Math.ceil(cri.getPage() / (double)displayPageNum) * displayPageNum);
-		startPage = (endPage - displayPageNum) + 1;
+		endPage = (int) (Math.ceil(cri.getPage() / (double)displayPageNum) * displayPageNum); //10
+		startPage = (endPage - displayPageNum) + 1;		// 1
 	  
-		int tempEndPage = (int) (Math.ceil(totalCount / (double)cri.getPerPageNum()));
-		if (endPage > tempEndPage) {
-			endPage = tempEndPage;
+		int tempEndPage = (int) (Math.ceil(totalCount / (double)cri.getPerPageNum()));	// 2
+		if (endPage > tempEndPage) { 
+			endPage = tempEndPage;		// 2
 		}
 		prev = startPage == 1 ? false : true;
 		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
@@ -109,9 +111,7 @@ public class PageMaker {
 		return uriComponents.toUriString();
 	}
 	
-	public String makeSearch(int page)
-	{
-	  
+	public String makeSearch(int page){
 	 UriComponents uriComponents =
 	            UriComponentsBuilder.newInstance()
 	            .queryParam("page", page)
@@ -119,6 +119,7 @@ public class PageMaker {
 	            .queryParam("searchType", ((SearchCriteria)cri).getSearchType())
 	            .queryParam("keyword", encoding(((SearchCriteria)cri).getKeyword()))
 	            .build(); 
+	 
 	    return uriComponents.toUriString();  
 	}
 

@@ -20,7 +20,7 @@
          self.location = "/boardList" + '${pageMaker.makeQuery(1)}' 
          						+ "&searchType=" + $("select option:selected").val() 
          						+ "&keyword=" + encodeURIComponent($('#keywordInput').val()) 
-         						+ "&category=" + '${pageMaker.category}';
+         						+ "&category=" + '${scri.category}';
        });
      });   
    
@@ -36,7 +36,7 @@
                    
                    
                    <h1 class="h3 mb-2 text-gray-800">
-                   <c:set var="ctgr" value="${pageMaker.category}"/> 
+                   <c:set var="ctgr" value="${scri.category}"/> 
 					<c:choose>
 						<c:when test="${ctgr == 'tech'}"> Tech </c:when>
 						<c:when test="${ctgr == 'job'}"> Job </c:when>
@@ -51,10 +51,10 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <c:set var="tag" value="${pageMaker.tagName}"/> 
+                            <c:set var="tag" value="${scri.tagName}"/> 
 							<c:if test="${not empty tag}">
 	                            <h3 class="m-0 font-weight-bold text-primary">
-	                            	#${pageMaker.tagName}
+	                            	#${scri.tagName}
 	                            </h3>
                             </c:if>
                         	<button class="create btn btn-success btn-wide pull-right" type="button" onclick="location.href='/boardInsertForm';" ><i class="fa fa-pencil"></i> 새 글 쓰기</button>
@@ -122,22 +122,22 @@
 											
 												<!-- prev 버튼 -->
 												  <c:if test="${pageMaker.prev}">
-												    	<li><a href="/boardList${pageMaker.makeSearch(pageMaker.startPage - 1)}&category=${pageMaker.category}&tagName=${pageMaker.tagName}">«</a></li>
+												    	<li><a href="/boardList${pageMaker.makeSearch(pageMaker.startPage - 1)}&category=${scri.category}&tagName=${scri.tagName}">«</a></li>
 												  </c:if> 
 												
 												
 												<!-- 페이지 번호 (시작 페이지 번호부터 끝 페이지 번호까지) -->
 												  <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-												  	<c:set var="tag" value="${pageMaker.tagName}"/> 
+												  	<c:set var="tag" value="${scri.tagName}"/> 
 													<c:choose>
-														<c:when test="${empty tag}"> <li><a href="/boardList${pageMaker.makeSearch(idx)}&category=${pageMaker.category}">${idx}</a></li> </c:when>
-														<c:when test="${not empty tag}"> <li><a href="/boardList${pageMaker.makeSearch(idx)}&category=${pageMaker.category}&tagName=${pageMaker.tagName}">${idx}</a></li> </c:when>
+														<c:when test="${empty tag}"> <li><a href="/boardList${pageMaker.makeSearch(idx)}&category=${scri.category}">${idx}</a></li> </c:when>
+														<c:when test="${not empty tag}"> <li><a href="/boardList${pageMaker.makeSearch(idx)}&category=${scri.category}&tagName=${scri.tagName}">${idx}</a></li> </c:when>
 													</c:choose>
 											   	  </c:forEach>
 												
 												<!-- next 버튼 -->
 												<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-											    	<li><a href="/boardList${pageMaker.makeSearch(pageMaker.endPage + 1)}&category=${pageMaker.category}&tagName=${pageMaker.tagName}">»</a></li>
+											    	<li><a href="/boardList${pageMaker.makeSearch(pageMaker.endPage + 1)}&category=${scri.category}&tagName=${scri.tagName}">»</a></li>
 											    </c:if> 
 											</ul>
 										</nav>

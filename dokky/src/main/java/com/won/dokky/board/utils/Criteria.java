@@ -1,14 +1,15 @@
 package com.won.dokky.board.utils;
 
-//파라미터들을 맡아서 관리하는 클래스.  @RequestParam 으로 매개변수 받아서 복잡해지고 많아짐. 클래스로 넘기면됨
+//파라미터들을 맡아서 관리하는 클래스.  @RequestParam 으로 매개변수 받아서 복잡해지고 많아짐. scri 클래스로 넘기면됨
 public class Criteria {
 
 	private int page;
 	private int perPageNum;
 	private int rowStart;
 	private int rowEnd;
-	private String category;
 	
+
+
 	public Criteria() {
 		this.page = 1;
 		this.perPageNum = 10;
@@ -53,18 +54,12 @@ public class Criteria {
 	}
 	
 
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
+	
 
 	@Override
 	public String toString() {
 		return "Criteria [page=" + page + ", perPageNum=" + perPageNum + ", rowStart=" + rowStart + ", rowEnd=" + rowEnd
-				+ ", category=" + category + "]";
+				+ "]";
 	}
 	
 	

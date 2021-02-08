@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.won.dokky.board.BoardReplyVO;
 import com.won.dokky.board.BoardVO;
 import com.won.dokky.board.HashTagVO;
 import com.won.dokky.board.utils.SearchCriteria;
@@ -27,6 +26,10 @@ public interface BoardMapper {
 	public List<BoardVO> list(SearchCriteria scri) throws Exception;
 	// 총게시물. 검색기능에서 쓰기 위해서 scri 넘겨줌.
 	public int listCount(SearchCriteria scri) throws Exception; 
+	// 작성자별 게시물
+	public List<BoardVO> writerBoardList(SearchCriteria scri) throws Exception;
+	// 작성자별 게시물 갯수
+	public int writerBoardListCount(SearchCriteria scri) throws Exception;
 	// 조회수	
 	public boolean plusCnt(String seq);
 	
@@ -40,17 +43,17 @@ public interface BoardMapper {
 	public void updateFile(Map<String, Object> map) throws Exception;
 	
 	// 댓글조회	
-	public List<BoardReplyVO> readReply(String seq) throws Exception;
+	public List<BoardVO> readReply(String seq) throws Exception;
 	// 댓글 갯수
 	public int replyCount(String seq) throws Exception;
 	// 댓글 작성
-	public void boardReplyInsert(BoardReplyVO board);
+	public void boardReplyInsert(BoardVO board);
 	// 댓글 삭제
 	public void boardReplyDelete(@Param("seq")String seq, @Param("rseq")String rseq) throws Exception;
 	// 댓글 수정
-    public int boardReplyModify(BoardReplyVO board) throws Exception;
+    public int boardReplyModify(BoardVO board) throws Exception;
     // 댓글 한 건 조회
-    public BoardReplyVO selectReply(@Param("seq")String seq, @Param("rseq")String rseq) throws Exception;
+    public BoardVO selectReply(@Param("seq")String seq, @Param("rseq")String rseq) throws Exception;
 
 	
     //커뮤니티게시글 조회

@@ -67,15 +67,16 @@
                 var regDay = parseInt(boardRegDate.substring(8,10));
                 
                 var monthGap =  getThisMonth-regMonth;
-                var dayGap =  getThisDay-regDay+30;
+                var dayGap =  getThisDay-regDay;
                 var dateGap = "";
-                
+
                 if(monthGap == 0 && dayGap == 0 ){
              	   dateGap = "오늘";
-                }else if( dayGap <= 31){
-             	   dateGap = dayGap +"일전";
-                }else if( monthGap >=1 && dayGap >=30){
-             	   dateGap = monthGap +"개월전";
+                }else if(monthGap == 00 && dayGap > 0 && dayGap <31 ){
+             	   dateGap = dayGap + "일전";
+             	   
+                }else if(monthGap >=1 ){
+             	   dateGap = monthGap + "개월전";
                 }
 
                 str += "<tr onclick='javascript:goBoardDetail2("+ boardSeq +");' style='cursor:Pointer'>";

@@ -16,7 +16,42 @@
 	FROM board
 </select>
 
+<!-- 작성자별 게시물 리스트 -->
+<select id="writerBoardList" resultType="BoardVO" parameterType="SearchCriteria">
+        SELECT *
+		FROM (
+		        SELECT    ROW_NUMBER() OVER (ORDER BY regdate DESC) rnum , result.*
+		          FROM	(
+			          		SELECT  writer, regdate, seq seq, title, category, 'N' rseq, content
+			                FROM board
+			                 WHERE  writer = #{memId}
+			                
+			                UNION ALL
+			                
+			                SELECT  b.writer, br.regdate, b.seq seq, title, category,  NVL2(rseq,'Y','N') rseq, br.content
+			                FROM boardReply br JOIN board b ON br.seq=b.seq
+			                WHERE  br.writer = #{memId}
+		                ) result
+		     )
+         WHERE rnum BETWEEN #{rowStart} AND #{rowEnd}
+</select>
 
+<!-- 작성자별 게시물 리스트 갯수 -->
+<select id="writerBoardListCount" resultType="int" parameterType="SearchCriteria">
+			SELECT count(*)
+			FROM(
+			        SELECT  writer, seq
+					FROM 	board 
+					WHERE 	writer = #{memId}
+							
+			                UNION ALL
+			        
+			        SELECT  writer, seq
+			        FROM 	boardReply 
+			        WHERE 	writer= #{memId}
+				 )
+			 WHERE <![CDATA[ seq>0]]>
+</select>
 
 <!-- 게시물 리스트 -->
 	<select id="list" resultType="BoardVO" parameterType="SearchCriteria">
@@ -30,6 +65,7 @@
 			         WHERE 1=1
 			         <include refid="search"></include>
 			         <include refid="category"></include>
+			         <if test='memId !=null'>AND writer = #{memId}</if>
 			      <if test='tagName !=null'>AND UPPER(tagName)=UPPER(#{tagName})</if>  
 			       )
         WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
@@ -37,7 +73,7 @@
 		
 	</select>
 			
-<!-- DB에서 전체 데이터 갯수 가져옴  -->
+<!-- 게시물 리스트 갯수 -->
 	<select id="listCount" resultType="int" parameterType="SearchCriteria">
 			
 				SELECT count(b.seq)
@@ -48,13 +84,10 @@
 				WHERE 1=1
 				<include refid="search"></include>	
 				<include refid="category"></include>
-				
-				 <if test='tagName !=null'>AND tagname=#{tagName}</if>  
+				 <if test='tagName !=null'>AND UPPER(tagname)=UPPER(#{tagName})</if>  
 			<![CDATA[AND b.seq>0]]>
 			</select>
-<!-- 게시물 리스트 끝-->
 
-	
 <!--  게시글 등록 -->
 	<insert id="boardInsert" parameterType="BoardVO" useGeneratedKeys="true" keyProperty="seq">
 		<selectKey keyProperty="seq" resultType="String" order="BEFORE">
@@ -90,13 +123,15 @@
 		</set>					  
 			WHERE seq = #{seq}		
 	</update>
+
 <!-- 게시물 삭제 -->
 	<delete id="boardDelete" parameterType="BoardVO">
 		DELETE board
 		WHERE seq = #{seq}
 	</delete>
+
 <!-- 게시물 삭제할 때 하위 댓글 먼저 삭제 쿼리 -->
-	<delete id="boardRepliesDelete" parameterType="BoardReplyVO">
+	<delete id="boardRepliesDelete" parameterType="BoardVO">
 		DELETE boardReply
 		WHERE seq = #{seq}
 	</delete>
@@ -110,6 +145,9 @@
 
 </select>
 
+
+
+<!-- @@@@@@@@  메인 페이지  @@@@@@@@@@ -->
 <!-- 커뮤니티 -->
 <select id="boardCummunity"	 resultType="BoardVO">
 	SELECT seq, title, writer, regdate
@@ -140,7 +178,12 @@
 			          ORDER BY tagname_count desc) 
 		WHERE rownum <![CDATA[ <=]]> 20
 </select>
+<!-- @@@@@@@@  메인 페이지 끝 @@@@@@@@@ -->
 
+
+
+
+<!-- @@@@@@@@  첨부파일 @@@@@@@@@ -->
 <!-- 첨부파일등록 -->
  <insert id="insertFile" parameterType="hashMap">
 		INSERT INTO board_file (
@@ -184,11 +227,15 @@
     			DEL_GB = 'Y'
     	WHERE FILE_NO = #{FILE_NO}
     </update>
+<!-- @@@@@@@@  첨부파일 끝 @@@@@@@@@ -->
+    
+    
     
     
     
 <!-- SQL 조각 모음 -->	
 	<sql id="category">
+		<if test="category !=null">
 			<choose>
 				<when test='category =="notice"'>
 					AND  category = 'notice'
@@ -209,6 +256,7 @@
 					AND  (category = 'tech' or category = 'job')
 				</when>
 			</choose>  
+		</if>	
 	</sql>
 	
 	<sql id="search">

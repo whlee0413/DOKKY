@@ -1,8 +1,6 @@
 package com.won.dokky.board;
 
-import java.util.Date;
-
-public class BoardReplyVO {
+public class BoardReplyVO extends BoardVO{
 
 	private String seq;
 	private String rseq;

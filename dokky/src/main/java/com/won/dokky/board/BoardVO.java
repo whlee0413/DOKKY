@@ -1,7 +1,5 @@
 package com.won.dokky.board;
 
-import java.util.Date;
-
 public class BoardVO {
 	
 	
@@ -14,11 +12,19 @@ public class BoardVO {
 	String regdate;
 	String modidate;
 	
+	String rseq;
+	
 	String memId;
 	String tagName;
 	
 	
 	
+	public String getRseq() {
+		return rseq;
+	}
+	public void setRseq(String rseq) {
+		this.rseq = rseq;
+	}
 	public String getTagName() {
 		return tagName;
 	}
@@ -85,7 +91,7 @@ public class BoardVO {
 	@Override
 	public String toString() {
 		return "BoardVO [seq=" + seq + ", cnt=" + cnt + ", title=" + title + ", writer=" + writer + ", content="
-				+ content + ", category=" + category + ", regdate=" + regdate + ", modidate=" + modidate + ", memId="
-				+ memId + ", tagName=" + tagName + "]";
+				+ content + ", category=" + category + ", regdate=" + regdate + ", modidate=" + modidate + ", rseq="
+				+ rseq + ", memId=" + memId + ", tagName=" + tagName + "]";
 	}
 }

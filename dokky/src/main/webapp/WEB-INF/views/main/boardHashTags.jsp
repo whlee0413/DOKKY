@@ -26,7 +26,6 @@
             type    :"POST",    
             success : function(obj) {
                 getBoardHashTagListCallback(obj);
-                console.log("성공,   " + "obj : " + obj);
             },           
             error     : function(xhr, status, error) {
             	console.log(xhr, status, error);
@@ -50,15 +49,12 @@
             	var tagName		   = list[a].tagName;
             	var tagId		   = list[a].tagId;
                
-            	console.log("tagName은  " +tagName);
-            	console.log("tagId는  " +tagId);
             	
             	
                 str += "<h3 >";
                 str +=	'<a href="javascript:void(0);" onclick="javascript:goHashTagList(' +'\''  +tagName + '\'' + ')">' +'#'+tagName+ '</a>';
             	str += "</h3 >";
             } 
-            console.log("str은:  " + str);
         } else {
             
             str += "<tr>";

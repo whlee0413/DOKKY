@@ -34,25 +34,22 @@ public class BoardController {
 	
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	PageMaker pageMaker;
 	
+
 	
 	//페이징 리스트
 	@RequestMapping(value = "/boardList", method = RequestMethod.GET)
-	public String list(Model model,  String category, String tagName
-					   ,@ModelAttribute("scri") SearchCriteria scri) throws Exception{
+	public String list(Model model,   @ModelAttribute("scri") SearchCriteria scri) throws Exception{
 		  //@ModelAttribute 어노테이션이 붙은 객체가 (scri객체) 자동으로 Model객체에 추가되고 뷰단으로 전달된다.
 		 //@ModelAttribute("scri") SearchCriteria scri 에서 괄호안에있는 scri 값을 통해서 뷰단에서 데이터들을 호출할수있다.
 
 		
 		
-		PageMaker pageMaker = new PageMaker();
-		
-		pageMaker.setTagName(tagName);
 		pageMaker.setCri(scri);
-		pageMaker.setCategory(category);
 		pageMaker.setTotalCount(boardService.listCount(scri));
-		
-		
+
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("list", boardService.list(scri));
 		
@@ -60,6 +57,25 @@ public class BoardController {
 		
 		return "/board/boardPaging";
 	}
+	
+	//작성자 게시글 조회
+	@RequestMapping(value="/writerBoardList", method = RequestMethod.GET)
+	public String writerBoardList(Model model, @ModelAttribute("scri") SearchCriteria scri
+								) throws Exception{
+
+		
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(boardService.writerBoardListCount(scri));
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("list", boardService.writerBoardList(scri));
+		System.out.println(boardService.writerBoardList(scri));
+		return "/board/writerBoard";
+		
+		
+	}
+	
+	
+	
 	
 	
 	// 게시글 등록폼
@@ -110,13 +126,14 @@ public class BoardController {
 		model.addAttribute("board", boardService.selectBoard(board));
 		boardService.plusCnt(seq);
 		
-		List<BoardReplyVO> replyList = boardService.readReply(seq);
+		List<BoardVO> replyList = boardService.readReply(seq);
 		model.addAttribute("replyList", replyList);
 		int replyCount = boardService.replyCount(seq);
 		model.addAttribute("replyCount", replyCount);
 		model.addAttribute("hashTagList", boardService.selectHashTags(seq));
 
 		List<Map<String, Object>> fileList = boardService.selectFileList(seq);
+		System.out.println("fileList : " +fileList);
 		model.addAttribute("file",fileList);
 		
 		return "/board/boardContent";
@@ -131,7 +148,6 @@ public class BoardController {
 		List<HashTagVO> hashTag =  boardService.selectHashTags(board.getSeq());
 		String result = "";
 		for(int i=0; i<hashTag.size(); i++) {
-			System.out.println(hashTag.get(i).getTagName()); 
 			if(i==hashTag.size()-1) {
 				result += "#" + hashTag.get(i).getTagName();	
 			}else {
@@ -239,7 +255,7 @@ public class BoardController {
 		// 댓글 단건 조회
 		@RequestMapping("/boardReplySelect")
 		@ResponseBody
-		public BoardReplyVO boardReplySelect(@RequestParam String seq, @RequestParam String rseq) throws Exception {
+		public BoardVO boardReplySelect(@RequestParam String seq, @RequestParam String rseq) throws Exception {
 			return  boardService.selectReply(seq, rseq);
 		}
 		
