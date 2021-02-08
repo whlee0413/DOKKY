@@ -164,8 +164,9 @@
 							<article class="content-text" itemprop="articleBody">
 								${board.content}
 							</article><br/><br/><br/>
-						
-						<span>첨부파일 목록</span>
+						<c:set var="file" value="${file }"></c:set>
+						<c:if test="${!empty file}">
+						<span>첨부파일 목록</span></c:if>
 							<div class="form-group" style="border: 1px solid #dbdbdb;">
 								<c:forEach var="file" items="${file}">
 									<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>

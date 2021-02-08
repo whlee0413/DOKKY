@@ -2,6 +2,7 @@ package com.won.dokky.board.web;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,12 +69,10 @@ public class BoardController {
 		pageMaker.setTotalCount(boardService.writerBoardListCount(scri));
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("list", boardService.writerBoardList(scri));
-		System.out.println(boardService.writerBoardList(scri));
 		return "/board/writerBoard";
 		
 		
 	}
-	
 	
 	
 	
