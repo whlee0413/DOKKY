@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+
 <script>
 	$(document).ready(function(){    
         getBoardList();
@@ -100,7 +101,6 @@
     }
 	
 </script>
-	 	<tr style=""></tr>
 	 	
 	 	 <style type="text/css">
 					li {list-style: none; float: left; padding: 6px;}
@@ -117,7 +117,7 @@
                                    			<col width="20%"/>
                                    			<col width="20%"/>
                                    		</colgroup>
-                            		 <tbody id="tbody">							
+                            		 <tbody id="tbody" >							
 										
 										
 									</tbody>

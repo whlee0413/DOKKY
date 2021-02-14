@@ -12,7 +12,7 @@
 li {
 	list-style: none;
 	float: left;
-	padding: 6px;
+	pahttps://www.youtube.com/watch?v=cCgOESMQe44&list=PL59LTecnGM1Mg6I4i_KbS0w5bPcDjl7oz&index=3dding: 6px;
 }
 </style>
 
@@ -20,6 +20,7 @@ li {
 <script>
 	//페이징
 	$(function() {
+		
 		$('#searchBtn').click(
 				function() {
 					self.location = "/boardList" + '${pageMaker.makeQuery(1)}'
