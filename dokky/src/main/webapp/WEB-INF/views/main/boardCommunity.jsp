@@ -76,12 +76,11 @@
                var monthGap =  getThisMonth-regMonth;
                var dayGap =  getThisDay-regDay;
                var dateGap = "";
-				
                
               
                if(monthGap == 0 && dayGap == 0 ){
             	   dateGap = "오늘";
-               }else if(monthGap == 00 && dayGap > 0 && dayGap <31 ){
+               }else if(monthGap == 0 && (dayGap > 0 && dayGap <31) ){
             	   dateGap = dayGap + "일전";
             	   
                }else if(monthGap >1 ){
